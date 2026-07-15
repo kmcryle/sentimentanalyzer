@@ -469,6 +469,15 @@ body, [class*="css"], p, span, div, label {
     font-size: .85rem;
 }
 
+/* Force primary button label text to white (covers nested p/span/div that
+   would otherwise inherit the dark body-text color rule above) */
+button[kind="primary"],
+button[kind="primary"] p,
+button[kind="primary"] span,
+button[kind="primary"] div {
+    color: #FFFFFF !important;
+}
+
 /* ---------- Findings list (Key Findings, plain text style) ---------- */
 .findings-block {
     background: #FFFFFF;
@@ -928,11 +937,17 @@ with tab2:
                     textfont=dict(size=10, family="Montserrat"),
                 ))
             fig_line.update_layout(
-                showlegend=False,
+                showlegend=True,
+                legend=dict(
+                    orientation="h",
+                    yanchor="bottom", y=1.02,
+                    xanchor="center", x=0.5,
+                    font=dict(size=11, family="Montserrat"),
+                ),
                 yaxis=dict(range=[0.6, 1.05], tickformat=".0%", gridcolor="#e2e8f0"),
                 plot_bgcolor="#FFFFFF", paper_bgcolor="rgba(0,0,0,0)",
                 font=dict(family="Montserrat", size=11),
-                margin=dict(t=10, b=20, l=20, r=20),
+                margin=dict(t=40, b=20, l=20, r=20),
                 height=280,
             )
             st.plotly_chart(fig_line, use_container_width=True)
@@ -1105,6 +1120,11 @@ with tab2:
 
     with st.container(border=True):
         st.markdown("**Sentiment Distribution by Duo**")
+        st.markdown(
+            '<div style="font-size:.78rem;color:#94a3b8;margin:-4px 0 10px 0;">'
+            'Select a duo to see its predicted sentiment breakdown per model.</div>',
+            unsafe_allow_html=True,
+        )
         duo_choice = st.selectbox("Select a duo", list(duo_names.keys()),
                                    format_func=lambda k: duo_names[k], key="duo_pick",
                                    label_visibility="collapsed")
@@ -1452,12 +1472,19 @@ with tab3:
         fig_all.update_layout(
             barmode="group",
             yaxis=dict(range=[0,1.15]), 
-            title="Sentiment Distribution per Model",
             plot_bgcolor="#FFFFFF",
             paper_bgcolor="#FFFFFF",
         )
 
-        st.plotly_chart(fig_all, use_container_width=True)
+        with st.container(border=True):
+            st.markdown("**Sentiment Distribution per Model**")
+            st.markdown(
+                '<div style="font-size:.78rem;color:#94a3b8;margin:-4px 0 10px 0;">'
+                'Predicted sentiment scores for your input sentence across Negative, Neutral, and '
+                'Positive — higher bars mean the model is more confident in that label.</div>',
+                unsafe_allow_html=True,
+            )
+            st.plotly_chart(fig_all, use_container_width=True)
 
         r1, r2, r3, r4 = st.columns(4)
 
