@@ -1,0 +1,9 @@
+[theme]
+# Forces light theme regardless of the visitor's system/browser preference
+# or their personal Streamlit "Settings > Theme" choice (e.g. set to "System").
+base = "light"
+primaryColor = "#1A3FA4"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F4F6F8"
+textColor = "#1e293b"
+font = "sans serif"

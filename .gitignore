@@ -1,0 +1,41 @@
+﻿# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Streamlit secrets
+.streamlit/secrets.toml
+
+# Environment variabless
+.env
+.env.*
+
+# Editors
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model training checkpoints that are not used by the application
+checkpoint-*/
+checkpoints/
+runs/
+wandb/
+
+# Hugging Face cache
+.cache/
+huggingface/s
