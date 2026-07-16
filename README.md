@@ -64,7 +64,7 @@ Opens at `http://localhost:8501` with three tabs:
 └── README.md
 ```
 
-Training happens separately, in Google Colab — this repo only holds the **finished artifacts** (model weights, tokenizers, label encoders) plus the app that serves them, so it runs standalone without needing to retrain anything.
+Training happens separately in Google Colab, where this repo only holds the **finished artifacts** (model weights, tokenizers, label encoders) plus the app that serves them, so it runs standalone without needing to retrain anything.
 
 ```
 Reddit (PRAW scraping) → cleaning + duo-tagging + manual annotation
@@ -116,7 +116,7 @@ The training notebooks (one per model) run in Google Colab and aren't part of th
 
 ## Limitations
 
-- Labels come from manual annotation on a single-subreddit dataset — results may not generalize beyond r/pinoybigbrother or this specific PBB season.
+- Labels come from manual annotation on a single-subreddit dataset, which results may not generalize beyond r/pinoybigbrother or this specific PBB season.
 - Reddit sentiment reflects a Taglish/English-speaking, terminally-online subset of fans, not the full voting population — the show's actual vote allows unlimited paid votes via app, which Reddit sentiment can't capture.
 - The "Neutral" class remains the weakest across all models and is the main source of misclassification.
 
