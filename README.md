@@ -1,6 +1,14 @@
 # Predicting Audience Voting Outcomes Through Code-Switched Sentiment Analysis with Fine-Tuned BERT-Based Transformers and LSTM Networks
 
-This is a working prototype built for an undergraduate thesis, showcasing how data analytics and NLP techniques can be applied to sentiment analysis on code-switched (Taglish) text — using real Reddit discussions about Pinoy Big Brother as the case study.
+Pinoy Big Brother (PBB) is one of the most talked-about reality shows in the Philippines, and its fandom on Reddit discusses it almost entirely in *Taglish* — code-switched Tagalog-English. This thesis asks a simple question: does what fans say on Reddit actually line up with who wins?
+
+We scraped Reddit discussions from *r/pinoybigbrother* during the final stretch of PBB Celebrity Collab Edition 1 (June 7 – July 5, 2025), covering the show's *Big Four duos* — *AzVer, BreKa, CharEs, and RaWi*, and built a full pipeline to:
+
+1. Collect and clean the raw Reddit posts/comments
+2. Manually annotate sentiment (positive / neutral / negative)
+3. Train and fine-tune four different models to classify that sentiment
+4. Compare model performance, especially on code-switched text
+5. Aggregate predicted sentiment per duo and compare it against the *official Big Night voting results*
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue)]()
 [![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B)]()
@@ -67,14 +75,14 @@ Reddit (PRAW scraping) → cleaning + duo-tagging + manual annotation
 
 ## The Research Behind It
 
-PBB fandom discussions on Reddit are almost entirely **Taglish** — code-switched Tagalog-English — which most sentiment analysis work doesn't account for. This thesis set out to answer four questions:
+This thesis set out to answer four questions:
 
 1. How do a trained LSTM and pre-trained transformers (mBERT, RoBERTa, XLM-RoBERTa) compare on sentiment about the Big Four duos — **AzVer, BreKa, CharEs, RaWi**?
 2. How does code-switching affect each model's performance?
 3. What's the distribution of predicted sentiment (positive/neutral/negative) per duo?
 4. Do those predicted sentiments line up with the official Big Night rankings?
 
-**Dataset:** 141,921 Reddit entries (2,334 posts + 139,587 comments) from **r/pinoybigbrother**, collected via **PRAW** between June 7 and July 5, 2025 — the reveal of the final duos through the Big Night finale — then manually annotated for sentiment. A secondary benchmark of ~36,801 English-only Reddit comments (2019 Indian General Elections, Kaggle) was used to isolate the effect of code-switching from other platform effects. Raw data isn't included in this repository — only the trained artifacts and the app are checked in.
+**Dataset:** 141,921 Reddit entries (2,334 posts + 139,587 comments) from **r/pinoybigbrother**, collected via **PRAW** between June 7 and July 5, 2025 — the reveal of the final duos through the Big Night finale, then manually annotated for sentiment. A secondary benchmark of ~36,801 English-only Reddit comments (2019 Indian General Elections, Kaggle) was used to isolate the effect of code-switching from other platform effects. Raw data isn't included in this repository, only the trained artifacts and the app are checked in.
 
 **Models compared:**
 
@@ -120,5 +128,3 @@ The training notebooks (one per model) run in Google Colab and aren't part of th
 - **Advisers:** Mary Jane C. Samonte · Madhavi Devaraj
 - **Program:** BS Data Science, School of Information Technology, Mapua University
 - **Year:** 2026
-
-
