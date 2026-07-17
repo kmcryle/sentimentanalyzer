@@ -2,7 +2,7 @@
 
 Pinoy Big Brother (PBB) is one of the most talked-about reality shows in the Philippines, and its fandom on Reddit discusses it almost entirely in *Taglish* — code-switched Tagalog-English. This thesis asks a simple question: does what fans say on Reddit actually line up with who wins?
 
-We scraped Reddit discussions from *r/pinoybigbrother* during the final stretch of PBB Celebrity Collab Edition 1 (June 7 – July 5, 2025), covering the show's *Big Four duos* — *AzVer, BreKa, CharEs, and RaWi*, and built a full pipeline to:
+We scraped Reddit discussions from *r/pinoybigbrother* during the final stretch of PBB Celebrity Collab Edition 1 (June 7 – July 5, 2025), covering the show's *Big Four duos* — *AzVer, BreKa, CharEs, and RaWi* — and built a full pipeline to:
 
 1. Collect and clean the raw Reddit posts/comments
 2. Manually annotate sentiment (positive / neutral / negative)
@@ -18,6 +18,9 @@ We scraped Reddit discussions from *r/pinoybigbrother* during the final stretch 
 > 🔗 **Live demo:** https://taglish-sentiment-analyzer.streamlit.app/
 
 ---
+
+> **GitHub "About" field (repo description):**
+> A Taglish sentiment analyzer for PBB's Big Four duos — comparing LSTM, mBERT, RoBERTa, and XLM-RoBERTa on code-switched Reddit data. Undergraduate thesis prototype.
 
 ## Try It
 
@@ -57,14 +60,25 @@ Opens at `http://localhost:8501` with three tabs:
 │   ├── mbert/                  # HuggingFace format (config.json, model.safetensors, tokenizer files)
 │   ├── roberta/                # HuggingFace format
 │   └── xlmr/                   # HuggingFace format
+├── notebooks/
+│   ├── training/                # Fine-tuning on the Taglish PBB dataset
+│   │   ├── lstm_taglish.ipynb
+│   │   ├── mbert_taglish.ipynb
+│   │   ├── roberta_taglish.ipynb
+│   │   └── xlmr_taglish.ipynb
+│   └── benchmark_english/       # Same models, run on the English-only benchmark dataset
+│       ├── lstm_english_benchmark.ipynb
+│       ├── mbert_english_benchmark.ipynb
+│       ├── roberta_english_benchmark.ipynb
+│       └── xlmr_english_benchmark.ipynb
 ├── sentiment_app.py             # Main Streamlit app
-├── upload_models.py             # Pushes trained model artifacts into models/
+├── upload_models.py             # Pushes trained model artifacts into models
 ├── requirements.txt
 ├── .streamlit/                  # Streamlit config (theme, settings)
 └── README.md
 ```
 
-Training happens separately in Google Colab, where this repo only holds the **finished artifacts** (model weights, tokenizers, label encoders) plus the app that serves them, so it runs standalone without needing to retrain anything.
+Training happens separately in Google Colab. This repo only holds the **finished artifacts** (model weights, tokenizers, label encoders) plus the app that serves them, so it runs standalone without needing to retrain anything.
 
 ```
 Reddit (PRAW scraping) → cleaning + duo-tagging + manual annotation
@@ -82,7 +96,7 @@ This thesis set out to answer four questions:
 3. What's the distribution of predicted sentiment (positive/neutral/negative) per duo?
 4. Do those predicted sentiments line up with the official Big Night rankings?
 
-**Dataset:** 141,921 Reddit entries (2,334 posts + 139,587 comments) from **r/pinoybigbrother**, collected via **PRAW** between June 7 and July 5, 2025 — the reveal of the final duos through the Big Night finale, then manually annotated for sentiment. A secondary benchmark of ~36,801 English-only Reddit comments (2019 Indian General Elections, Kaggle) was used to isolate the effect of code-switching from other platform effects. Raw data isn't included in this repository, only the trained artifacts and the app are checked in.
+**Dataset:** 141,921 Reddit entries (2,334 posts + 139,587 comments) from **r/pinoybigbrother**, collected via **PRAW** between June 7 and July 5, 2025 — the reveal of the final duos through the Big Night finale — then manually annotated for sentiment. A secondary benchmark of ~36,801 English-only Reddit comments (2019 Indian General Elections, Kaggle) was used to isolate the effect of code-switching from other platform effects. Raw data isn't included in this repository — only the trained artifacts and the app are checked in.
 
 **Models compared:**
 
@@ -107,16 +121,23 @@ This thesis set out to answer four questions:
 - **Neutral** sentiment is consistently the hardest class for every model, due to mixed or ambiguous phrasing.
 - All four models predicted the same ranking (RaWi 1st, BreKa 2nd, CharEs 3rd, AzVer 4th), correctly calling 3rd and 4th place — but all missed the actual 1st/2nd swap (BreKa won, RaWi came 2nd), likely because Reddit sentiment can't see the show's unlimited paid-voting mechanic.
 
-## Retraining From Scratch
+## Training Notebooks
 
-The training notebooks (one per model) run in Google Colab and aren't part of this repo — each covers data loading, tokenization, hyperparameter search, final training, and evaluation (classification report, confusion matrix, ROC-AUC). To rerun training yourself, you'd need:
+All eight notebooks used to train and evaluate the models are included under `notebooks/`, split into two sets:
 
-- The cleaned, annotated dataset (`FINAL_cleaned_annotations_RESOLVED1.csv` — not included here for privacy/size reasons)
+- **`notebooks/training/`** — one notebook per model (LSTM, mBERT, RoBERTa, XLM-RoBERTa), fine-tuned on the annotated Taglish PBB dataset. These produced the artifacts that live in `models/`.
+- **`notebooks/benchmark_english/`** — the same four models, retrained on the English-only benchmark dataset ("Dataset 2"), used to measure the code-switching accuracy drop reported in the Results section.
+
+Each notebook was run in Google Colab and covers data loading, tokenization, hyperparameter search, final training, and evaluation (classification report, confusion matrix, ROC-AUC).
+
+Data collection and preprocessing (scraping, cleaning, duo-tagging, manual annotation) happen in separate notebooks that aren't part of this repo. To rerun any training notebook yourself, you'd need:
+
+- The corresponding cleaned, annotated dataset (not included here for privacy/size reasons)
 - A GPU runtime (Colab's free tier is enough at this dataset size)
 
 ## Limitations
 
-- Labels come from manual annotation on a single-subreddit dataset, which results may not generalize beyond r/pinoybigbrother or this specific PBB season.
+- Labels come from manual annotation on a single-subreddit dataset — results may not generalize beyond r/pinoybigbrother or this specific PBB season.
 - Reddit sentiment reflects a Taglish/English-speaking, terminally-online subset of fans, not the full voting population — the show's actual vote allows unlimited paid votes via app, which Reddit sentiment can't capture.
 - The "Neutral" class remains the weakest across all models and is the main source of misclassification.
 
@@ -125,6 +146,6 @@ The training notebooks (one per model) run in Google Colab and aren't part of th
 **Predicting Audience Voting Outcomes Through Code-Switched Sentiment Analysis with Fine-Tuned BERT-Based Transformers and LSTM Networks**
 
 - **Authors:** Kim Caryl H. Esperanza · Louella Josephine A. Ng · Lourence Anne Q. Resquid
-- **Advisers:** Mary Jane C. Samonte · Madhavi Devaraj
+- **Advisers:** Dr. Mary Jane C. Samonte · Dr. Madhavi Devaraj
 - **Program:** BS Data Science, School of Information Technology, Mapua University
 - **Year:** 2026
