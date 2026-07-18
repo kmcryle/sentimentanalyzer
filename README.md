@@ -19,9 +19,6 @@ We scraped Reddit discussions from *r/pinoybigbrother* during the final stretch 
 
 ---
 
-> **GitHub "About" field (repo description):**
-> A Taglish sentiment analyzer for PBB's Big Four duos — comparing LSTM, mBERT, RoBERTa, and XLM-RoBERTa on code-switched Reddit data. Undergraduate thesis prototype.
-
 ## Try It
 
 **Requirements:** Python 3.10+
